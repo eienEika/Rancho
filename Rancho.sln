@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rancho.Server", "Rancho.Server\Rancho.Server.csproj", "{A2116F93-3A0B-4193-B3B8-66681CE09C98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rancho.Client", "Rancho.Client\Rancho.Client.csproj", "{17EA9DCA-AFE9-4047-8EC8-AD57627A9C25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rancho.Protocol", "Rancho.Protocol\Rancho.Protocol.csproj", "{46358054-C643-4316-869E-44CE000D109C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A2116F93-3A0B-4193-B3B8-66681CE09C98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2116F93-3A0B-4193-B3B8-66681CE09C98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2116F93-3A0B-4193-B3B8-66681CE09C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2116F93-3A0B-4193-B3B8-66681CE09C98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17EA9DCA-AFE9-4047-8EC8-AD57627A9C25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17EA9DCA-AFE9-4047-8EC8-AD57627A9C25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17EA9DCA-AFE9-4047-8EC8-AD57627A9C25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17EA9DCA-AFE9-4047-8EC8-AD57627A9C25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46358054-C643-4316-869E-44CE000D109C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46358054-C643-4316-869E-44CE000D109C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46358054-C643-4316-869E-44CE000D109C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46358054-C643-4316-869E-44CE000D109C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

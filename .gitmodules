@@ -1,0 +1,3 @@
+[submodule "native/qmlnet-native"]
+	path = native/qmlnet-native
+	url = https://github.com/qmlnet/qmlnet-native
