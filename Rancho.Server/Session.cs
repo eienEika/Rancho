@@ -1,5 +1,5 @@
-using System;
 using NetCoreServer;
+using Rancho.Protocol;
 
 namespace Rancho.Server
 {
@@ -11,7 +11,11 @@ namespace Rancho.Server
 
         protected override void OnReceived(byte[] buffer, long offset, long size)
         {
-            Server.Multicast(buffer, offset, size);
+            foreach (var message in Message.Read(buffer, (int) offset, (int) size))
+            {
+                Request.Process(Program.Server.Users.ContainsKey(Id) ? Program.Server.Users[Id] : new User(this),
+                    message);
+            }
         }
     }
 }

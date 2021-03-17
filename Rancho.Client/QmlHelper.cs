@@ -13,10 +13,10 @@ namespace Rancho.Client
 
         private static readonly Dictionary<MessageType, string> SignalnameLookup = new()
         {
-            [MessageType.Connect] = UserConnectedSignal,
-            [MessageType.ChatMessage] = ChatMessageSignal,
-            [MessageType.SetUrl] = UrlChangedSignal,
-            [MessageType.SetPause] = PauseChangedSignal,
+            [MessageType.UserConnected] = UserConnectedSignal,
+            [MessageType.ChatMessageServer] = ChatMessageSignal,
+            [MessageType.SetUrlServer] = UrlChangedSignal,
+            [MessageType.SetPauseServer] = PauseChangedSignal,
         };
 
         public static void ActivateSignal(object instance, MessageType messageType, dynamic[] data)

@@ -23,7 +23,7 @@ namespace Rancho.Client
 
         protected override void OnReceived(byte[] buffer, long offset, long size)
         {
-            foreach (var message in Message.Read(new ReadOnlyMemory<byte>(buffer, (int) offset, (int) size)))
+            foreach (var message in Message.Read(buffer, (int) offset, (int) size))
             {
                 var raiseOnMessage = OnMessage;
                 raiseOnMessage?.Invoke(this, new MessageEventArgs(message));
@@ -32,7 +32,7 @@ namespace Rancho.Client
 
         public void SendAsync(Message message)
         {
-            SendAsync(message.Pack());
+            SendAsync(message.Write());
         }
     }
 }
