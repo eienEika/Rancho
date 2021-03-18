@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using NetCoreServer;
+using Rancho.Protocol;
 
 namespace Rancho.Server
 {
@@ -8,6 +11,16 @@ namespace Rancho.Server
         {
             OptionKeepAlive = true;
             OptionDualMode = true;
+        }
+
+        public Dictionary<Guid, User> Users { get; } = new();
+
+        public void Multicast(Message message)
+        {
+            foreach (var user in Users.Values)
+            {
+                user.SendAsync(message);
+            }
         }
 
         protected override TcpSession CreateSession()

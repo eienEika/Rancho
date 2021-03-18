@@ -4,7 +4,7 @@ namespace Rancho.Server
 {
     internal static class Program
     {
-        private static Server _server;
+        public static Server Server;
 
         private static void Main(string[] args)
         {
@@ -12,8 +12,8 @@ namespace Rancho.Server
             ushort port;
             ushort.TryParse(args[1], out port);
 
-            _server = new Server(ip, port);
-            _server.Start();
+            Server = new Server(ip, port);
+            Server.Start();
 
             while (true)
             {

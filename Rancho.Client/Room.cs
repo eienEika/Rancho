@@ -10,7 +10,6 @@ namespace Rancho.Client
     public sealed class Room
     {
         private Client _client;
-        private string _username;
 
         public void Connect(string ip, int port, string username)
         {
@@ -19,10 +18,9 @@ namespace Rancho.Client
                 return;
             }
 
-            _username = username;
             _client = new Client(ip, (ushort) port);
 
-            _client.OnClientConnected += (_, _) => _client.SendAsync(UserConnectedMsg.Create(_username));
+            _client.OnClientConnected += (_, _) => _client.SendAsync(HelloMsg.Create(username));
             _client.OnMessage += MessageHandler;
 
             _client.ConnectAsync();
@@ -40,17 +38,17 @@ namespace Rancho.Client
 
         public void SendChatMessage(string text)
         {
-            _client.SendAsync(ChatMessageMsg.Create(_username, text));
+            _client.SendAsync(ChatMessageMsgClient.Create(text));
         }
 
         public void SetUrl(string url)
         {
-            _client.SendAsync(SetUrlMsg.Create(url));
+            _client.SendAsync(SetUrlMsgClient.Create(url));
         }
 
         public void SetPause(bool pause)
         {
-            _client.SendAsync(SetPauseMsg.Create(pause));
+            _client.SendAsync(SetPauseMsgClient.Create(pause));
         }
     }
 }

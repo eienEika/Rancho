@@ -2,9 +2,9 @@ using System.Formats.Cbor;
 
 namespace Rancho.Protocol.Messages
 {
-    public sealed class UserConnectedMsg : Message
+    public sealed class HelloMsg : Message
     {
-        public override MessageType MessageType { get; } = MessageType.UserConnected;
+        public override MessageType MessageType { get; } = MessageType.Hello;
         public override dynamic[] Data { get; } = new dynamic[1];
 
         private protected override bool ReadData(CborReader reader)
@@ -13,7 +13,7 @@ namespace Rancho.Protocol.Messages
             {
                 return false;
             }
-
+            
             Data[0] = reader.ReadTextString();
 
             return true;
@@ -24,7 +24,7 @@ namespace Rancho.Protocol.Messages
             Writer.WriteTextString(Data[0]);
         }
 
-        public static UserConnectedMsg Create(string username)
+        public static HelloMsg Create(string username)
         {
             return new() {Data = {[0] = username}};
         }
