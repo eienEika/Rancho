@@ -7,9 +7,16 @@ namespace Rancho.Protocol.Messages
         public override MessageType MessageType { get; } = MessageType.SetPauseServer;
         public override dynamic[] Data { get; } = new dynamic[1];
 
-        private protected override void ReadData(CborReader reader)
+        private protected override bool ReadData(CborReader reader)
         {
+            if (reader.PeekState() != CborReaderState.Boolean)
+            {
+                return false;
+            }
+
             Data[0] = reader.ReadBoolean();
+
+            return true;
         }
 
         private protected override void WriteData()

@@ -13,7 +13,7 @@ namespace Rancho.Protocol
 
         private protected CborWriter Writer { get; } = new(CborConformanceMode.Canonical, true, true);
 
-        private protected abstract void ReadData(CborReader reader);
+        private protected abstract bool ReadData(CborReader reader);
         private protected abstract void WriteData();
 
         public static IEnumerable<Message> Read(byte[] data, int offset, int size)
@@ -44,7 +44,15 @@ namespace Rancho.Protocol
                 var messageBuffer = new byte[length];
                 stream.Read(messageBuffer);
 
-                var message = ReadCbor(messageBuffer);
+                Message message;
+                try
+                {
+                    message = ReadCbor(messageBuffer);
+                }
+                catch (CborContentException)
+                {
+                    yield break;
+                }
 
                 if (message == null)
                 {
@@ -76,7 +84,20 @@ namespace Rancho.Protocol
         private static Message ReadCbor(byte[] data)
         {
             var reader = new CborReader(data, CborConformanceMode.Canonical, true);
-            var messageType = (MessageType) reader.ReadUInt64();
+            MessageType messageType;
+            try
+            {
+                if (reader.PeekState() == CborReaderState.UnsignedInteger)
+                {
+                    return null;
+                }
+
+                messageType = (MessageType) reader.ReadUInt64();
+            }
+            catch (OverflowException)
+            {
+                return null;
+            }
 
             Message message = messageType switch
             {
@@ -96,8 +117,23 @@ namespace Rancho.Protocol
                 return null;
             }
 
+            if (reader.PeekState() != CborReaderState.StartArray)
+            {
+                return null;
+            }
+
             reader.ReadStartArray();
-            message.ReadData(reader);
+
+            if (!message.ReadData(reader))
+            {
+                return null;
+            }
+
+            if (reader.PeekState() != CborReaderState.EndArray)
+            {
+                return null;
+            }
+
             reader.ReadEndArray();
 
             return message;
