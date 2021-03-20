@@ -2,6 +2,7 @@ using System.Formats.Cbor;
 
 namespace Rancho.Protocol.Messages
 {
+    [Message(MessageType.SetUrlClient)]
     public sealed class SetUrlMsgClient : Message
     {
         public override MessageType MessageType { get; } = MessageType.SetUrlClient;

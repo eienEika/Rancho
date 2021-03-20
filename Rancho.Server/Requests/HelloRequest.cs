@@ -3,6 +3,7 @@ using Rancho.Protocol.Messages;
 
 namespace Rancho.Server.Requests
 {
+    [Request(MessageType.Hello)]
     internal sealed class HelloRequest : Request
     {
         public HelloRequest(User user, Message requestMessage) : base(user, requestMessage)

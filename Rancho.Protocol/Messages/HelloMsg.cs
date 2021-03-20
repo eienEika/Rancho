@@ -2,6 +2,7 @@ using System.Formats.Cbor;
 
 namespace Rancho.Protocol.Messages
 {
+    [Message(MessageType.Hello)]
     public sealed class HelloMsg : Message
     {
         public override MessageType MessageType { get; } = MessageType.Hello;
@@ -13,7 +14,7 @@ namespace Rancho.Protocol.Messages
             {
                 return false;
             }
-            
+
             Data[0] = reader.ReadTextString();
 
             return true;

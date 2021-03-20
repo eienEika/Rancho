@@ -3,6 +3,7 @@ using Rancho.Protocol.Messages;
 
 namespace Rancho.Server.Requests
 {
+    [Request(MessageType.ChatMessageClient)]
     internal sealed class ChatMessageRequest : Request
     {
         public ChatMessageRequest(User user, Message requestMessage) : base(user, requestMessage)

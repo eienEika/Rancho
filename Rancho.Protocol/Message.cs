@@ -2,12 +2,31 @@ using System;
 using System.Collections.Generic;
 using System.Formats.Cbor;
 using System.IO;
-using Rancho.Protocol.Messages;
+using System.Linq;
+using System.Reflection;
 
 namespace Rancho.Protocol
 {
     public abstract class Message
     {
+        private static readonly Dictionary<MessageType, ConstructorInfo> Messages = new();
+
+        static Message()
+        {
+            foreach (var type in Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(t => t.Namespace == "Rancho.Protocol.Messages" && t.IsSubclassOf(typeof(Message))))
+            {
+                var attr = type.GetCustomAttribute<MessageAttribute>();
+                var constructor = type.GetConstructor(BindingFlags.Public | BindingFlags.Instance, null,
+                    CallingConventions.HasThis, Type.EmptyTypes, null);
+                if (constructor != null)
+                {
+                    Messages.Add(attr!.MessageType, constructor);
+                }
+            }
+        }
+
         public abstract MessageType MessageType { get; }
         public abstract dynamic[] Data { get; }
 
@@ -87,7 +106,7 @@ namespace Rancho.Protocol
             MessageType messageType;
             try
             {
-                if (reader.PeekState() == CborReaderState.UnsignedInteger)
+                if (reader.PeekState() != CborReaderState.UnsignedInteger)
                 {
                     return null;
                 }
@@ -99,23 +118,12 @@ namespace Rancho.Protocol
                 return null;
             }
 
-            Message message = messageType switch
-            {
-                MessageType.Hello => new HelloMsg(),
-                MessageType.ChatMessageClient => new ChatMessageMsgClient(),
-                MessageType.SetUrlClient => new SetUrlMsgClient(),
-                MessageType.SetPauseClient => new SetPauseMsgClient(),
-                MessageType.UserConnected => new UserConnectedMsg(),
-                MessageType.ChatMessageServer => new ChatMessageMsgServer(),
-                MessageType.SetUrlServer => new SetUrlMsgServer(),
-                MessageType.SetPauseServer => new SetPauseMsgServer(),
-                _ => null,
-            };
-
-            if (message == null)
+            if (!Messages.TryGetValue(messageType, out var constructor))
             {
                 return null;
             }
+
+            var message = (Message) constructor.Invoke(null);
 
             if (reader.PeekState() != CborReaderState.StartArray)
             {

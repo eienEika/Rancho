@@ -2,6 +2,7 @@ using System.Formats.Cbor;
 
 namespace Rancho.Protocol.Messages
 {
+    [Message(MessageType.ChatMessageServer)]
     public sealed class ChatMessageMsgServer : Message
     {
         public override MessageType MessageType { get; } = MessageType.ChatMessageServer;

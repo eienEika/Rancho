@@ -2,6 +2,7 @@ using System.Formats.Cbor;
 
 namespace Rancho.Protocol.Messages
 {
+    [Message(MessageType.UserConnected)]
     public sealed class UserConnectedMsg : Message
     {
         public override MessageType MessageType { get; } = MessageType.UserConnected;

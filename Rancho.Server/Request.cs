@@ -1,10 +1,30 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Rancho.Protocol;
-using Rancho.Server.Requests;
 
 namespace Rancho.Server
 {
     internal abstract class Request
     {
+        private static readonly Dictionary<MessageType, ConstructorInfo> Requests = new();
+
+        static Request()
+        {
+            foreach (var type in Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(t => t.Namespace == "Rancho.Server.Requests" && t.IsSubclassOf(typeof(Request))))
+            {
+                var attr = type.GetCustomAttribute<RequestAttribute>();
+                var constructor = type.GetConstructor(BindingFlags.Public | BindingFlags.Instance, null,
+                    CallingConventions.HasThis, new[] {typeof(User), typeof(Message)}, null);
+                if (constructor != null)
+                {
+                    Requests.Add(attr!.MessageType, constructor);
+                }
+            }
+        }
+
         protected Request(User user, Message requestMessage)
         {
             User = user;
@@ -25,19 +45,12 @@ namespace Rancho.Server
                 return;
             }
 
-            Request request = message.MessageType switch
-            {
-                MessageType.Hello => new HelloRequest(user, message),
-                MessageType.ChatMessageClient => new ChatMessageRequest(user, message),
-                MessageType.SetPauseClient => new SetPauseRequest(user, message),
-                MessageType.SetUrlClient => new SetUrlRequest(user, message),
-                _ => null,
-            };
-
-            if (request == null)
+            if (!Requests.TryGetValue(message.MessageType, out var constructor))
             {
                 return;
             }
+
+            var request = (Request) constructor.Invoke(new object[] {user, message});
 
             request.ProcessImpl();
 

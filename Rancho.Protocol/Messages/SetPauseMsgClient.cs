@@ -2,6 +2,7 @@ using System.Formats.Cbor;
 
 namespace Rancho.Protocol.Messages
 {
+    [Message(MessageType.SetPauseClient)]
     public sealed class SetPauseMsgClient : Message
     {
         public override MessageType MessageType { get; } = MessageType.SetPauseClient;
