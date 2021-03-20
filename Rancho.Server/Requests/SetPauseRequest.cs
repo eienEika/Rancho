@@ -3,6 +3,7 @@ using Rancho.Protocol.Messages;
 
 namespace Rancho.Server.Requests
 {
+    [Request(MessageType.SetPauseClient)]
     internal sealed class SetPauseRequest : Request
     {
         public SetPauseRequest(User user, Message requestMessage) : base(user, requestMessage)
